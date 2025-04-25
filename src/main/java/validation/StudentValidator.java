@@ -1,6 +1,8 @@
 package validation;
 
 import domain.Student;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StudentValidator implements Validator<Student> {
 
@@ -11,10 +13,19 @@ public class StudentValidator implements Validator<Student> {
      */
     @Override
     public void validate(Student entity) throws ValidationException {
+        try {
+            int idInteger = Integer.parseInt(entity.getID());
+            if(idInteger <= 0){
+                throw new ValidationException("Id incorect!");
+            }
+        }
+        catch (NumberFormatException e) {
+            throw new ValidationException("Id incorect!");
+        }
         if(entity.getID().equals("")){
             throw new ValidationException("Id incorect!");
         }
-        if(entity.getID() == null){
+        if(entity.getID() == null || entity.getID().charAt(0) == '-'){
             throw new ValidationException("Id incorect!");
         }
         if(entity.getNume() == ""){
@@ -29,7 +40,12 @@ public class StudentValidator implements Validator<Student> {
         if(entity.getNume() == null){
             throw new ValidationException("Nume incorect!");
         }
-        if(entity.getEmail().equals("")){
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(entity.getEmail());
+
+        if(!matcher.matches()){
             throw new ValidationException("Email incorect!");
         }
     }
