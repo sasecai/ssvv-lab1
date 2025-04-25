@@ -71,4 +71,46 @@ public class WBTTests {
         assertEquals(result1, null);
     }
 
+    @Test
+    void assignmentInvalidIdEmpty() {
+        Tema tema = new Tema("", "salut", 3, 1);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
+    @Test
+    void assignmentInvalidIdNull() {
+        Tema tema = new Tema(null, "salut", 3, 1);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
+    @Test
+    void assignmentInvalidDescription() {
+        Tema tema = new Tema("123", "", 3, 1);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
+    @Test
+    void assignmentInvalidDeadlineTooSmall() {
+        Tema tema = new Tema("123", "afsdfs", 0, 1);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
+    @Test
+    void assignmentInvalidDeadlineTooBig() {
+        Tema tema = new Tema("123", "afsdfs", 15, 1);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
+    @Test
+    void assignmentInvalidPrimireTooSmall() {
+        Tema tema = new Tema("123", "afsdfs", 1, 0);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
+    @Test
+    void assignmentInvalidPrimireTooBig() {
+        Tema tema = new Tema("123", "afsdfs", 1, 15);
+        assertThrows(ValidationException.class, () -> {service.addTema(tema);});
+    }
+
 }
